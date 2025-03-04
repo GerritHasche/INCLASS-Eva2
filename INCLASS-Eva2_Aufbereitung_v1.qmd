@@ -1,0 +1,93 @@
+---
+title: "INCLASS_Eva2"
+author: "Gerrit Hasche, Theresa Serratore"
+format: html
+editor: visual
+---
+
+# Preparation documentation Evaluationstudy 2
+
+## Adjusting the raw-data before import into R
+
+1.  data_INCLASS_TP3_2025-03-03_09-05.xlsx
+
+```         
+N=623 –\> Deleting "admin"-cases
+```
+
+2.  N=598
+
+```         
+Recode of non-numeric information into numeric answerss (number of semesters)
+```
+
+3.  Deleting not needed/empty columns
+
+4.  Creating a new page "table_R"
+
+5.  Save as INCLASS_Eva_2_raw_v1.2.xlsx
+
+## Installation of R-packages
+
+```{r}
+install.packages("here")
+install.packages("ggforce")
+install.packages("patchwork")
+install.packages("sciplot")
+install.packages("lubridate")
+install.packages("cowplot")
+install.packages("ggthemes")
+install.packages("lavaan")
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("yarrr")
+install.packages("ggplot2")
+install.packages("car")
+install.packages("readxl")
+install.packages("tidyr")
+install.packages("psy")
+install.packages("nFactors")
+install.packages("sjPlot")
+install.packages("corrplot")
+install.packages("psych")
+install.packages("GPArotation")
+install.packages("renv")
+```
+
+```{r}
+
+library(here)
+library(ggforce)
+library(patchwork)
+library(sciplot)
+library(lubridate)
+library(cowplot)
+library(ggthemes)
+library(lavaan)
+library(tidyverse)
+library(dplyr) 
+library(yarrr)
+library(ggplot2)
+library(car)
+library(readxl)
+library(tidyr)
+library(psy)
+library(nFactors)
+library(sjPlot)
+library(corrplot)
+library(psych)
+library(GPArotation)
+```
+
+## Working directory
+
+```{r}
+getwd()
+
+```
+
+```{r}
+
+eva_raw <- read_excel("INCLASS_Eva_2_raw_v1.2.xlsx", sheet = "table_R")
+View(eva_raw)
+```

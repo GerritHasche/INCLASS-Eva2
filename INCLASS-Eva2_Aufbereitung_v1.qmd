@@ -91,3 +91,228 @@ getwd()
 eva_raw <- read_excel("INCLASS_Eva_2_raw_v1.2.xlsx", sheet = "table_R")
 View(eva_raw)
 ```
+
+## Refilling and selection
+
+Missing socio-demographics information at the second measurement time are taken over from the first.
+
+```{r}
+eva_raw_v2 <- eva_raw %>%
+  group_by(SERIAL)%>%
+  fill (SD01, .direction= "down")%>%
+  fill (SD06, .direction= "down")%>%
+  fill (SD08, .direction= "down")%>%
+  fill (SD09, .direction= "down")%>%
+  fill (SD10, .direction= "down")%>%
+  fill (SD11, .direction= "down")%>%
+  fill (SD12, .direction= "down")%>%
+  fill (SD13, .direction= "down")%>%
+  fill (SD18s, .direction= "down")%>%
+  fill (SD19, .direction= "down")%>%
+  ungroup()
+
+print(eva_raw_v2)
+```
+
+Delete cases that answered less than 50% of the questions
+
+```{r}
+eva_raw_v2[eva_raw_v2 == -9] <- NA
+
+eva_v1 <- eva_raw_v2 %>% filter(rowMeans(is.na(.)) <= 0.50)
+removed <- eva_raw_v2 %>% filter(rowMeans(is.na(.)) > 0.50)
+
+print(removed)
+```
+
+## Rename & Reorder
+
+### Socio-demographic
+
+```{r}
+eva_v2 <- eva_v1 %>%
+  rename(
+    sex=SD01,
+    schooltype=SD19, 
+    exp01=SD06,
+    exp02=SD08, 
+    exp03=SD09,
+    exp04=SD10,
+    exp05=SD11,
+    exp06=SD12,
+    exp07=SD13,
+    semester=SD18s,
+    exp09=SD20,
+    exp11=SD22,
+    exp10=SD21)
+```
+
+```{r}
+eva_v2 <- eva_v2 %>%
+  rename(
+    a_ink02_f=BB01_02,
+    a_ink03_f=BB01_03,
+    a_ink04_f=BB01_04,
+    a_ink05_f=BB01_05,
+    a_ink06=BB01_06,
+    a_ums01=BB02_01,
+    a_ums02=BB02_02,
+    a_ums03=BB02_03,
+    a_het01_f=BB03_01,
+    a_het02_f=BB03_02,
+    a_het03=BB03_03,
+    a_het04_f=BB03_04,
+    a_eff01=BB04_01,
+    a_eff02=BB04_02,
+    a_eff03_f=BB04_03,
+    a_eff04_f=BB04_04,
+    a_eff05_f=BB04_05,
+    a_koop02_f=BB05_03,
+    a_koop03_f=BB05_04,
+    a_koop04_f=BB05_05,
+    a_koop05_f=BB05_06,
+    a_ver01=BB07_01,
+    a_ver02=BB07_02,
+    a_ver03_f=BB07_03,
+    a_ver04_f=BB07_04,
+    a_ver05=BB07_05,
+    e_eta01=BE01_01,
+    e_eta02=BE01_02,
+    e_eta04=BE01_04,
+    e_eta05=BE01_05,
+    e_eta06=BE01_06,
+    s_krm01=BS02_01,
+    s_krm02=BS02_02,
+    s_krm03=BS02_03,
+    s_krm04=BS02_04,
+    s_krm05=BS02_05,
+    s_u01=BS03_01,
+    s_u02=BS03_02,
+    s_u03=BS03_03,
+    s_u04=BS03_04,
+    s_u05=BS03_05,
+    s_u06=BS03_06,
+    s_u07=BS03_07,
+    s_hv01=BS04_01,
+    s_hv02=BS04_02,
+    s_hv03=BS04_04,
+    s_hv04=BS04_03,
+    s_sk01=BS05_01,
+    s_sk02=BS05_02,
+    s_sk03=BS05_03,
+    s_sk04=BS05_04,
+    s_sk05=BS05_05,
+    s_koop04=BS06_04,
+    s_koop05=BS06_05,
+    u_unt01=BU02_01,
+    u_unt02=BU02_02,
+    u_unt03=BU02_03,
+    u_unt04=BU02_04,
+    u_unt05=BU02_05,
+    u_unt06=BU02_06,
+    u_unt07_f=BU02_07,
+    u_unt08_f=BU02_08,
+    u_unt09=BU02_09,
+    u_unt10=BU02_10,
+    u_unt11_f=BU02_11,
+    u_unt12=BU02_12,
+    u_unt13_f=BU02_13,
+    u_koop01=BU03_01,
+    u_koop02=BU03_02,
+    u_koop03=BU03_03,
+    u_koop04=BU03_04,
+    u_koop05_f=BU03_05,
+    u_koop06=BU03_06,
+    u_kom01=BU04_01,
+    u_kom02=BU04_02,
+    u_kom03=BU04_03,
+    u_kom04=BU04_04,
+    u_kom05=BU04_05,
+    u_kom06_f=BU04_06,
+    u_umw01=BU05_01,
+    u_umw03=BU05_03,
+    u_umw04=BU05_04,
+    u_umw05_f=BU05_05,
+    u_umw06=BU05_06,
+    u_umw07=BU05_07,
+    u_umw08=BU05_08,
+    u_sew01=BU06_01,
+    u_sew03=BU06_03,
+    u_sew04_f=BU06_04,
+    u_sew05=BU06_05,
+    u_sew06=BU06_06,
+    u_sew07=BU06_07,
+    u_per01=BU07_01,
+    u_per02=BU07_02,
+    u_per03=BU07_03,
+    u_per04=BU07_04,
+    u_per05=BU07_05,
+    w_def02_f=BW01_02,
+    w_def04=BW01_04,
+    w_def05_f=BW01_05,
+    w_def06=BW01_06,
+    w_def07_f=BW01_07,
+    w_aet01_f=BW02_01,
+    w_aet02_f=BW02_02,
+    w_aet03_f=BW02_03,
+    w_aet04_f=BW02_04,
+    w_aet07=BW02_07,
+    w_aet08=BW02_08,
+    w_epi01=BW03_01,
+    w_epi02f=BW03_02,
+    w_epi03f=BW03_03,
+    w_epi05=BW03_05,
+    w_the01_f=BW04_01,
+    w_the03_f=BW04_04,
+    w_the05=BW04_06,
+    w_the06=BW04_08,
+    w_the08_f=BW04_10,
+    w_vh02=BW05_02,
+    w_vh04=BW05_04,
+    w_vh05=BW05_05,
+    w_vh06=BW05_06,
+    w_vh07=BW05_07,
+    w_vh08=BW05_08,
+    w_sik01=BW06_01,
+    w_sik03=BW06_03,
+    w_sik04=BW06_04,
+    w_sik05=BW06_05,
+    w_sik07_f=BW06_07,
+    w_sik08_f=BW06_08,
+    w_sik09=BW06_09,
+    w_sik10=BW06_10,
+    w_ev01=BW08_01,
+    w_ev02_f=BW08_02,
+    w_ev03=BW08_03,
+    w_ev04=BW08_04,
+    w_ev05=BW08_05,
+    w_unt01=BW09_01,
+    w_unt02=BW09_02,
+    w_unt03=BW09_03,
+    w_unt04_f=BW09_04,
+    w_n01=BW10_01,
+    w_n02=BW10_02,
+    w_n03=BW10_03,
+    w_n04_f=BW10_04,
+    a_ee01=BX01_01,
+    a_ee02=BX01_02,
+    a_ee03=BX01_03,
+    a_ee04=BX01_04)
+
+```
+
+Restructure
+
+```{r}
+eva_v3 <- eva_v2[, c(1:5, 154, 155, 156, 157, 167, 158:164, 168:170, 171:174, 103:149, 60:102, 6:31, 37:59, 32:36, 150:153)]
+```
+
+Recode
+
+Dichotomising the knowledge items. Missing information is considered as missing knowledge.
+
+-   1 = I agree \> 0
+
+-   2 = Don't agree \> 1
+
+-   -1 = Don't know \> 0

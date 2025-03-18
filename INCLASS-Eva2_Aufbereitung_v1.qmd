@@ -316,3 +316,5 @@ Dichotomising the knowledge items. Missing information is considered as missing 
 -   2 = Don't agree \> 1
 
 -   -1 = Don't know \> 0
+
+hallo xD
